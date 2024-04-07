@@ -41,6 +41,7 @@ stages:
               azureSubscription: ${{ parameters.AzureArmServiceConnection }}
               scriptType: pscore
               scriptLocation: inlineScript
+              workingDirectory: ${{ parameters.workingDirectory }}
               inlineScript: |
                 $subscriptionId = & az account show --query id -o tsv
                 terraform init
