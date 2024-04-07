@@ -38,7 +38,7 @@ stages:
                 Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$(az account show --query id -o tsv)"
                 Write-Host "##vso[task.setvariable variable=ARM_USE_OIDC]true"
           - task: AzureCLI@2
-            name: Terraform_Credentials
+            name: Terraform_Init
             env:
               ARM_CLIENT_ID: $(ARM_CLIENT_ID)
               ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
