@@ -9,6 +9,10 @@ parameters:
     type: string
     default: $(Build.SourcesDirectory)/dev
 
+variables:
+  - name: System.Debug
+    value: true
+
 stages:
   - stage: Build_TFPlan
     jobs:
@@ -25,8 +29,6 @@ stages:
               azureSubscription: ${{ parameters.AzureArmServiceConnection }}
               scriptType: pscore
               inlineScript: |
-                Write-Host 'Dumping environment variables:'
-                Get-ChildItem Env:
                 Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$($env:servicePrincipalId)"
                 Write-Host "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$($env:servicePrincipalId)"
                 Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$($env:servicePrincipalId)"
