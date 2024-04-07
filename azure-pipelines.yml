@@ -45,6 +45,16 @@ stages:
               inlineScript: |
                 $subscriptionId = & az account show --query id -o tsv
                 terraform init
+          - task: AzureCLI@2
+            name: Terraform_Plan
+            inputs:
+              addSpnToEnvironment: true
+              azureSubscription: ${{ parameters.AzureArmServiceConnection }}
+              scriptType: pscore
+              scriptLocation: inlineScript
+              workingDirectory: ${{ parameters.workingDirectory }}
+              inlineScript: |
+                terraform plan
 
                 
 
