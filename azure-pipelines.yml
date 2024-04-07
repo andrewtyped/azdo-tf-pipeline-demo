@@ -45,15 +45,18 @@ stages:
               inlineScript: |
                 $subscriptionId = & az account show --query id -o tsv
                 terraform init
-          - task: AzureCLI@2
+          - task: PowerShell@2
             name: Terraform_Plan
+            env:
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
             inputs:
-              addSpnToEnvironment: true
-              azureSubscription: ${{ parameters.AzureArmServiceConnection }}
-              scriptType: pscore
-              scriptLocation: inlineScript
+              pwsh: true
+              targetType: inline
               workingDirectory: ${{ parameters.TerraformDirectory }}
-              inlineScript: |
+              script: |
+                Write-Host 
                 terraform plan
 
                 
