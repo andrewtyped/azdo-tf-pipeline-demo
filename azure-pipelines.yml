@@ -37,8 +37,8 @@ stages:
                 Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$($env:tenantId)"
                 Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$(az account show --query id -o tsv)"
                 Write-Host "##vso[task.setvariable variable=ARM_USE_OIDC]true"
-          - task: PowerShell@2
-            name: Terraform_Init
+          - task: AzureCLI@2
+            name: Terraform_Credentials
             env:
               ARM_CLIENT_ID: $(ARM_CLIENT_ID)
               ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
@@ -46,11 +46,26 @@ stages:
               ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
               ARM_USE_OIDC: $(ARM_USE_OIDC)
             inputs:
-              pwsh: true
-              targetType : inline
-              workingDirectory: ${{ parameters.TerraformDirectory }}
-              script: |
+              addSpnToEnvironment: true
+              azureSubscription: ${{ parameters.AzureArmServiceConnection }}
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
                 terraform init
+          # - task: PowerShell@2
+          #   name: Terraform_Init
+          #   env:
+          #     ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+          #     ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
+          #     ARM_TENANT_ID: $(ARM_TENANT_ID)
+          #     ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+          #     ARM_USE_OIDC: $(ARM_USE_OIDC)
+          #   inputs:
+          #     pwsh: true
+          #     targetType : inline
+          #     workingDirectory: ${{ parameters.TerraformDirectory }}
+          #     script: |
+          #       terraform init
           - task: PowerShell@2
             name: Terraform_Plan
             
