@@ -1,0 +1,46 @@
+parameters:
+  - name: BuildPool
+    type: string
+    default: 'ubuntu-latest'
+  - name: AzureArmServiceConnection
+    type: string
+    default: test0407-2
+  - name: TerraformDirectory
+    type: string
+    default: $(Build.SourcesDirectory)/dev
+
+stages:
+  - stage: Build_TFPlan
+    jobs:
+      - job: Build_TFPlan
+        pool: 
+          name: ${{ parameters.BuildPool }}
+        steps:
+          # Get secrets to use with terraform init
+          # The variables referenced here are set by the az cli task, and derived from the service connection provided to the azureSubscription input.
+          - task: AzureCLI@2
+            name: Terraform_Credentials
+            inputs:
+              addSpnToEnvironment: true
+              azureSubscription: ${{ parameters.AzureArmServiceConnection }}
+              scriptType: pscore
+              inlineScript: |
+                Write-Host 'Dumping environment variables:'
+                Get-ChildItem Env:
+                Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$($env:servicePrincipalId)"
+                Write-Host "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$($env:servicePrincipalId)"
+                Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$($env:servicePrincipalId)"
+                Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$($env:tenantId)"
+          - task: AzureCLI@2
+            name: Terraform_Init
+            inputs:
+              addSpnToEnvironment: true
+              azureSubscription: ${{ parameters.AzureArmServiceConnection }}
+              scriptType: pscore
+              inlineScript: |
+                $subscriptionId = & az account show --query id -o tsv
+                terraform init
+
+                
+
+              
