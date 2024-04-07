@@ -14,7 +14,7 @@ stages:
     jobs:
       - job: Build_TFPlan
         pool: 
-          name: ${{ parameters.BuildPool }}
+          vmImage: ${{ parameters.BuildPool }}
         steps:
           # Get secrets to use with terraform init
           # The variables referenced here are set by the az cli task, and derived from the service connection provided to the azureSubscription input.
