@@ -28,6 +28,7 @@ stages:
               addSpnToEnvironment: true
               azureSubscription: ${{ parameters.AzureArmServiceConnection }}
               scriptType: pscore
+              scriptLocation: inlineScript
               inlineScript: |
                 Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$($env:servicePrincipalId)"
                 Write-Host "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$($env:servicePrincipalId)"
