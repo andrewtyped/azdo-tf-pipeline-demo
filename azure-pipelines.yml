@@ -31,9 +31,9 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$($env:servicePrincipalId)"
-                Write-Host "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$($env:servicePrincipalId)"
-                Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$($env:servicePrincipalId)"
+                Write-Host "##vso[task.setvariable variable=ARM_OIDC_TOKEN;issecret=true]$($env:idToken)"
                 Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$($env:tenantId)"
+                #Write-Host "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$(az account show --query id -o tsv)"
           - task: AzureCLI@2
             name: Terraform_Init
             inputs:
