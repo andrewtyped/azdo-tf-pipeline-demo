@@ -50,6 +50,7 @@ stages:
               azureSubscription: ${{ parameters.AzureArmServiceConnection }}
               scriptType: pscore
               scriptLocation: inlineScript
+              workingDirectory: ${{ parameters.TerraformDirectory }}
               inlineScript: |
                 terraform init
           # - task: PowerShell@2
