@@ -22,7 +22,7 @@ stages:
         steps:
           # Get secrets to use with terraform init
           # The variables referenced here are set by the az cli task, and derived from the service connection provided to the azureSubscription input.
-          - task: AzureCLI@2.236.0 #downgrade az cli to combat 'toolExecution error'
+          - task: AzureCLI@2
             name: Terraform_Credentials
             inputs:
               addSpnToEnvironment: true
@@ -30,6 +30,8 @@ stages:
               scriptType: pscore
               scriptLocation: inlineScript
               inlineScript: |
+                Write-Host 'Dump Env vars'
+                Get-ChildItem Env:
                 Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$($env:servicePrincipalId)"
                 Write-Host "##vso[task.setvariable variable=ARM_OIDC_TOKEN;issecret=true]$($env:idToken)"
                 Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$($env:tenantId)"
