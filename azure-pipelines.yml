@@ -56,28 +56,15 @@ stages:
                 az storage container list --account-name satfstate032424 --auth-mode login
                 Write-Host 'tf init'
                 terraform init
-          # - task: PowerShell@2
-          #   name: Terraform_Init
-          #   env:
-          #     ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-          #     ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
-          #     ARM_TENANT_ID: $(ARM_TENANT_ID)
-          #     ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
-          #     ARM_USE_OIDC: $(ARM_USE_OIDC)
-          #   inputs:
-          #     pwsh: true
-          #     targetType : inline
-          #     workingDirectory: ${{ parameters.TerraformDirectory }}
-          #     script: |
-          #       terraform init
-          - task: PowerShell@2
+          - task: AzureCLI@2
             name: Terraform_Plan
-            
             inputs:
-              pwsh: true
-              targetType: inline
+              addSpnToEnvironment: true
+              azureSubscription: ${{ parameters.AzureArmServiceConnection }}
+              scriptType: pscore
+              scriptLocation: inlineScript
               workingDirectory: ${{ parameters.TerraformDirectory }}
-              script: |
+              inlineScript: |
                 terraform plan
 
                 
