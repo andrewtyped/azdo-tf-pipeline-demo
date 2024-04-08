@@ -44,7 +44,6 @@ stages:
               ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
               ARM_TENANT_ID: $(ARM_TENANT_ID)
               ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
-              ARM_USE_OIDC: $(ARM_USE_OIDC)
             inputs:
               addSpnToEnvironment: true
               azureSubscription: ${{ parameters.AzureArmServiceConnection }}
@@ -56,8 +55,14 @@ stages:
                 az storage container list --account-name satfstate032424 --auth-mode login
                 Write-Host 'tf init'
                 terraform init
+
           - task: AzureCLI@2
             name: Terraform_Plan
+            env:
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
+              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
             inputs:
               addSpnToEnvironment: true
               azureSubscription: ${{ parameters.AzureArmServiceConnection }}
