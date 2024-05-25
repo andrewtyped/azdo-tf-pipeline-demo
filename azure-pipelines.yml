@@ -83,7 +83,7 @@ stages:
                     scriptLocation: inlineScript
                     workingDirectory: ${{ parameters.TerraformDirectory }}
                     inlineScript: |
-                      & terraform apply '$(Pipeline.Workspave)/TerraformPlan/terraform.plan'
+                      & terraform apply '$(Pipeline.Workspace)/TerraformPlan/terraform.plan'
 
         
 
