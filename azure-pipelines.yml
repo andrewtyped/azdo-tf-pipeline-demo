@@ -46,7 +46,7 @@ stages:
                 $Directory = '$(Build.ArtifactStagingDirectory)/tfplan'
                 New-Item -ItemType Directory -Path $Directory -Force
                 $PlanFile = Join-Path -Path $Directory -ChildPath terraform.plan
-                & terraform plan -input=false -out=$PlanFile
+                & terraform plan -input=false --out=$PlanFile
 
                 Write-Host '##[section]Show TF Plan (No Secrets)'
                 $ShowFile = Join-Path -Path $Directory -ChildPath tfplan.txt
@@ -92,7 +92,7 @@ stages:
                       $Directory = '$(Build.ArtifactStagingDirectory)/tfplan'
                       New-Item -ItemType Directory -Path $Directory -Force
                       $PlanFile = Join-Path -Path $Directory -ChildPath terraform.plan
-                      & terraform plan -input=false -out=$PlanFile
+                      & terraform plan -input=false --out=$PlanFile
                       Write-Host "##vso[task.setvariable variable=TERRAFORM_PLAN_PATH]$PlanFile"
                   
                 - task: AzureCLI@2
